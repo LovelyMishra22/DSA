@@ -1,0 +1,36 @@
+/*
+  GFG question :
+
+  Given a connected undirected graph containing V vertices, represented by a 2-d adjacency list adj[][], where each adj[i] represents the list of vertices connected to vertex i. Perform a Breadth First Search (BFS) traversal starting from vertex 0, visiting vertices from left to right according to the given adjacency list, and return a list containing the BFS traversal of the graph.
+  
+  Note: Do traverse in the same order as they are in the given adjacency list.
+  
+  adjSizes[i] stores the number of neighbors node i has in the adjacency list.
+*/
+
+int* bfs(int** adj, int* adjSizes, int V) {
+    // Code here
+    int* res = calloc(V, sizeof(int));
+    int* vis = calloc(V, sizeof(int));
+    int max = 1000;
+    int queue[max];
+    int front = -1, rear = 0;
+    queue[rear++] = 0;
+    vis[0] = 1;
+    int i = 0;
+    while(front != rear - 1)
+    {
+        int num = queue[++front];
+        res[i] = num;
+        i++;
+        for(int j = 0; j < adjSizes[num]; j++)
+        {
+            if(vis[adj[num][j]] == 0) 
+            {
+                queue[rear++] = adj[num][j];
+                vis[adj[num][j]] = 1;
+            }
+        }
+    }
+    return res;
+}
