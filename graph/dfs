@@ -1,0 +1,37 @@
+/*
+
+  GFG question:
+
+  Given a connected undirected graph containing V vertices represented by a 2-d adjacency list adj[][], where each adj[i] represents the list of vertices connected to vertex i. Perform a Depth First Search (DFS) traversal starting from vertex 0, visiting vertices from left to right as per the given adjacency list, and return a list containing the DFS traversal of the graph.
+  
+  Note: Do traverse in the same order as they are in the given adjacency list.
+  
+  adjSizes[i] stores the number of neighbors node i has in the adjacency list.
+
+*/
+
+void dfsHelper(int** adj, int* adjSizes, int V, int* res, int *resIdx, int* vis, int num)
+{
+    vis[num] = 1;
+    res[*resIdx] = num;
+    (*resIdx)++;
+    for(int j = 0; j < adjSizes[num]; j++)
+    {
+        if(vis[adj[num][j]] == 0)
+        { 
+            dfsHelper(adj, adjSizes, V, res, resIdx, vis, adj[num][j]);
+        }
+    }
+    
+    return ;
+}
+
+int* dfs(int** adj, int* adjSizes, int V) {
+    // Code here
+    int* res = calloc(V, sizeof(int));
+    int* vis = calloc(V, sizeof(int));
+    int resIdx = 0;
+    dfsHelper(adj, adjSizes,V, res, &resIdx, vis, 0);
+    free(vis);
+    return res;
+}
