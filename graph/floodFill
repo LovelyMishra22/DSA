@@ -1,0 +1,60 @@
+/*
+  leetcode : 733
+
+  You are given an image represented by an m x n grid of integers image, where image[i][j] represents the pixel value of the image. You are also given three integers sr, sc, and color. Your task is to perform a flood fill on the image starting from the pixel image[sr][sc].
+  
+  To perform a flood fill:
+  
+  Begin with the starting pixel and change its color to color.
+  Perform the same process for each pixel that is directly adjacent (pixels that share a side with the original pixel, either horizontally or vertically) and shares the same color as the starting pixel.
+  Keep repeating this process by checking neighboring pixels of the updated pixels and modifying their color if it matches the original color of the starting pixel.
+  The process stops when there are no more adjacent pixels of the original color to update.
+  Return the modified image after performing the flood fill.
+*/
+
+/**
+ * Return an array of arrays of size *returnSize.
+ * The sizes of the arrays are returned as *returnColumnSizes array.
+ * Note: Both returned array and *columnSizes array must be malloced, assume caller calls free().
+ */
+
+void dfs(int** image, int imageSize, int* imageColSize, int i, int j, int color,  int** vis, int og, int** res)
+{
+    if( i < 0 || i >= imageSize || j < 0 || j >= imageColSize[i] || vis[i][j] == 1 || image[i][j] != og) return;
+    vis[i][j] = 1;
+    res[i][j] = color;
+    dfs(image, imageSize, imageColSize, i + 1, j, color,  vis, og, res);
+    dfs(image, imageSize, imageColSize, i - 1, j, color,  vis, og, res);
+    dfs(image, imageSize, imageColSize, i, j + 1, color,  vis, og, res);
+    dfs(image, imageSize, imageColSize, i, j - 1, color,  vis, og, res);
+}
+
+int** floodFill(int** image, int imageSize, int* imageColSize, int sr, int sc, int color, int* returnSize, int** returnColumnSizes) {
+    int** vis = calloc(imageSize, sizeof(int*));
+    for(int i = 0; i < imageSize; i++)
+    {
+        vis[i] = calloc(imageColSize[i], sizeof(int));
+    }
+
+    
+    int** res = calloc(imageSize, sizeof(int*));
+    for(int i = 0; i < imageSize; i++)
+    {
+        res[i] = calloc(imageColSize[i], sizeof(int));
+        for(int j = 0; j < imageColSize[i]; j++)
+        {
+            res[i][j] = image[i][j];
+        }
+    }
+
+    *returnSize = imageSize;
+    *returnColumnSizes = calloc(imageSize, sizeof(int));
+    for (int i = 0; i < imageSize; i++) {
+        (*returnColumnSizes)[i] = imageColSize[i];
+    }
+
+    int og = image[sr][sc];
+    dfs(image, imageSize, imageColSize, sr, sc, color,   vis, og, res);
+    
+    return res;
+}
