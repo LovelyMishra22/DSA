@@ -1,0 +1,39 @@
+/*
+  leetcode question : 200
+  
+  Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+  
+  An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+*/
+
+void dfs(char** grid, int gridSize, int* gridColSize, int**vis, int i, int j)
+{
+    if(i < 0 || i >= gridSize || j < 0 || j >= gridColSize[i] || vis[i][j] == 1 || grid[i][j] == '0') return;
+    vis[i][j] = 1;
+    dfs(grid, gridSize, gridColSize, vis, i + 1, j);
+    dfs(grid, gridSize, gridColSize, vis, i - 1, j);
+    dfs(grid, gridSize, gridColSize, vis, i, j + 1);
+    dfs(grid, gridSize, gridColSize, vis, i, j - 1);
+}
+
+int numIslands(char** grid, int gridSize, int* gridColSize) {
+    int** vis = calloc(gridSize, sizeof(int*));
+    for(int i = 0; i < gridSize; i++)
+    {
+        vis[i] = calloc(gridColSize[i], sizeof(int));
+    }
+    int islands = 0;
+    for(int i = 0; i < gridSize; i++)
+    {
+        for( int j = 0; j < gridColSize[i]; j++)
+        {
+            if(vis[i][j] == 0 && grid[i][j] == '1')
+            {
+                dfs(grid, gridSize, gridColSize, vis, i, j);
+                islands++;
+            }
+        }
+    }
+    free(vis);
+    return islands;
+}
